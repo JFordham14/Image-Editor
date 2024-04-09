@@ -22,4 +22,38 @@ public class CollisionManager {
 		}
 		return null;
 	}
+	public IHoverable getHovered(Vector2 coordinates) {
+		IHoverable iteratingHover;
+		for (int i=0; i<InputManager.Instance.HoverableItems.size; i++) {
+			iteratingHover = InputManager.Instance.HoverableItems.get(i);
+			if (iteratingHover instanceof Rec2D) {
+				if (
+						coordinates.x > ((Rec2D)iteratingHover).Position.x && 
+						coordinates.x < ((Rec2D)iteratingHover).Position.x+((Rec2D)iteratingHover).Scale.x &&
+						coordinates.y > ((Rec2D)iteratingHover).Position.y &&
+						coordinates.y < ((Rec2D)iteratingHover).Position.y+((Rec2D)iteratingHover).Scale.y
+				) {
+					return iteratingHover;
+				}
+			}
+		}
+		return null;
+	}
+	public IClickable getClicked(Vector2 coordinates) {
+		IClickable iteratingClick;
+		for (int i=0; i<InputManager.Instance.ClickableItems.size; i++) {
+			iteratingClick = InputManager.Instance.ClickableItems.get(i);
+			if (iteratingClick instanceof Rec2D) {
+				if (
+					coordinates.x > ((Rec2D) iteratingClick).Position.x && 
+					coordinates.x < ((Rec2D) iteratingClick).Position.x+((Rec2D) iteratingClick).Scale.x &&
+					coordinates.y > ((Rec2D) iteratingClick).Position.y &&
+					coordinates.y < ((Rec2D) iteratingClick).Position.y+((Rec2D) iteratingClick).Scale.y
+				) {
+					return iteratingClick;
+				}
+			}
+		}
+		return null;
+	}
 }
