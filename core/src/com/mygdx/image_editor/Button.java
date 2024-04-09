@@ -13,7 +13,6 @@ public class Button extends Rec2D implements IClickable, IHoverable {
 	public Button(Vector2 scale, Vector2 position, Color recColor) {
 		super(scale, position, recColor);
 		_startColor=recColor;
-		InputManager.Instance.Buttons.add(this);
 		InputManager.Instance.HoverableItems.add(this);
 		InputManager.Instance.ClickableItems.add(this);
 		_currentState = ButtonState.None;

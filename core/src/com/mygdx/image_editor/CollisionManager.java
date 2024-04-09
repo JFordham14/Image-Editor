@@ -7,50 +7,36 @@ public class CollisionManager {
 	public CollisionManager() {
 		Instance = this;
 	}
-	public Button getCollision(Vector2 coordinates) {
-		Button iteratingButton;
-		for (int i=0; i<InputManager.Instance.Buttons.size; i++) {
-			iteratingButton = InputManager.Instance.Buttons.get(i);
-			if (
-				coordinates.x > iteratingButton.Position.x && 
-				coordinates.x < iteratingButton.Position.x+iteratingButton.Scale.x &&
-				coordinates.y > iteratingButton.Position.y &&
-				coordinates.y < iteratingButton.Position.y+iteratingButton.Scale.y
-			) {
-				return iteratingButton;
-			}
-		}
-		return null;
-	}
+	
 	public IHoverable getHovered(Vector2 coordinates) {
-		IHoverable iteratingHover;
+		Rec2D hovered;
 		for (int i=0; i<InputManager.Instance.HoverableItems.size; i++) {
-			iteratingHover = InputManager.Instance.HoverableItems.get(i);
-			if (iteratingHover instanceof Rec2D) {
+			if (InputManager.Instance.HoverableItems.get(i) instanceof Rec2D) {
+				hovered = (Rec2D) InputManager.Instance.HoverableItems.get(i);
 				if (
-						coordinates.x > ((Rec2D)iteratingHover).Position.x && 
-						coordinates.x < ((Rec2D)iteratingHover).Position.x+((Rec2D)iteratingHover).Scale.x &&
-						coordinates.y > ((Rec2D)iteratingHover).Position.y &&
-						coordinates.y < ((Rec2D)iteratingHover).Position.y+((Rec2D)iteratingHover).Scale.y
+					coordinates.x > hovered.Position.x && 
+					coordinates.x < hovered.Position.x+hovered.Scale.x &&
+					coordinates.y > hovered.Position.y &&
+					coordinates.y < hovered.Position.y+hovered.Scale.y
 				) {
-					return iteratingHover;
+					return (IHoverable) hovered;
 				}
 			}
 		}
 		return null;
 	}
 	public IClickable getClicked(Vector2 coordinates) {
-		IClickable iteratingClick;
+		Rec2D clicked;
 		for (int i=0; i<InputManager.Instance.ClickableItems.size; i++) {
-			iteratingClick = InputManager.Instance.ClickableItems.get(i);
-			if (iteratingClick instanceof Rec2D) {
+			if (InputManager.Instance.ClickableItems.get(i) instanceof Rec2D) {
+				clicked = (Rec2D) InputManager.Instance.ClickableItems.get(i);
 				if (
-					coordinates.x > ((Rec2D) iteratingClick).Position.x && 
-					coordinates.x < ((Rec2D) iteratingClick).Position.x+((Rec2D) iteratingClick).Scale.x &&
-					coordinates.y > ((Rec2D) iteratingClick).Position.y &&
-					coordinates.y < ((Rec2D) iteratingClick).Position.y+((Rec2D) iteratingClick).Scale.y
+					coordinates.x > clicked.Position.x && 
+					coordinates.x < clicked.Position.x+clicked.Scale.x &&
+					coordinates.y > clicked.Position.y &&
+					coordinates.y < clicked.Position.y+clicked.Scale.y
 				) {
-					return iteratingClick;
+					return (IClickable) clicked;
 				}
 			}
 		}

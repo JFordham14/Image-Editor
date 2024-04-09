@@ -13,7 +13,7 @@ public class EditWindow extends Rec2D implements IClickable{
 		super(scale, position, backgroundColor);
 		InputManager.Instance.ClickableItems.add(this);
 		_doodleMap = new Pixmap((int) scale.x, (int) scale.y, Format.RGBA8888);
-		_doodleMap.setColor(Color.ORANGE);
+		_doodleMap.setColor(Color.PURPLE);
 		DoodleTexture = new Texture(_doodleMap);
 	}
 	public void onClickDown(Vector2 position) {

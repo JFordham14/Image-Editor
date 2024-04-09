@@ -5,12 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class InputManager implements InputProcessor {
-	public Array<Button> Buttons = new Array<Button>();
 	public Array<IClickable> ClickableItems = new Array<IClickable>();
 	public Array<IHoverable> HoverableItems = new Array<IHoverable>();	
 	static InputManager Instance;
 	private IHoverable _currentlyHovered;
 	private IClickable _currentlyClicked;
+	private int _clicks = 0; //Tracks how many mouse buttons are down
 	public InputManager() {
 		Instance = this;
 	}
@@ -25,6 +25,7 @@ public class InputManager implements InputProcessor {
 		return false;
 	}
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		_clicks++;
 		IClickable collision = CollisionManager.Instance.getClicked(
 			new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
 		if (collision != null) {
@@ -34,11 +35,14 @@ public class InputManager implements InputProcessor {
 		return true;
 	}
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		_clicks--;
 		IClickable collision = CollisionManager.Instance.getClicked(
 			new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
-		if (collision != null) { 
+		if (collision == _currentlyClicked && _currentlyClicked != null) { 
 			_currentlyClicked.onClickUp(new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
-			_currentlyClicked = null;
+			if (_clicks<=0) {
+				_currentlyClicked = null;
+			}
 		}
 		return true;
 	}
@@ -47,7 +51,9 @@ public class InputManager implements InputProcessor {
 	}
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		mouseMoved(screenX, screenY);
-		_currentlyClicked.onClickDragged(new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
+		if (_currentlyClicked != null) {
+			_currentlyClicked.onClickDragged(new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
+		}
 		return false;
 	}
 	public boolean mouseMoved(int screenX, int screenY) {
@@ -55,6 +61,7 @@ public class InputManager implements InputProcessor {
 			new Vector2(screenX, ImageEditor.Instance.ScreenSize.y-screenY));
 		if (collision != _currentlyHovered && _currentlyHovered != null) {
 			_currentlyHovered.onHoverExit();
+			if (_currentlyClicked==_currentlyHovered) { _currentlyClicked=null; }
 			_currentlyHovered = null;
 		} else if (collision != null) {
 			collision.onHovered();
