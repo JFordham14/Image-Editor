@@ -1,5 +1,6 @@
 package com.mygdx.image_editor;
 
+import java.io.IOException;
 import java.util.Random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -28,15 +29,19 @@ public class ImageEditor extends ApplicationAdapter {
 		InputManager inputManager = new InputManager();
 		Gdx.input.setInputProcessor(inputManager);
 		new ImageInputOutput();
-		Pixmap editMap = ImageInputOutput.instance.loadImage("blackbuck.bmp");
 		CollisionManager collisionManager = new CollisionManager();
 		// Build Program
 		Vector2 editWindowSize = new Vector2(500, ScreenSize.y-40);
 		_editWindow = new EditWindow(
-			editWindowSize, new Vector2(ScreenSize.x-editWindowSize.x, 0), Color.GRAY
+			editWindowSize, new Vector2(ScreenSize.x-editWindowSize.x, 0)
 		);
-		_editWindow.DoodleTexture = new Texture(editMap);
 		_button1 = new Button(new Vector2(50, 50), new Vector2(0,0), Color.YELLOW);
+	}
+	
+	public void filesImported (String[] filePaths) {
+		Pixmap map = ImageInputOutput.instance.loadImage(filePaths[0]);
+		if (map==null) { return; }
+		_editWindow.RecTexture = new Texture(map);
 	}
 
 	@Override

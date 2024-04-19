@@ -8,15 +8,17 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EditWindow extends Rec2D implements IClickable{
 	public Texture DoodleTexture;
-	private Pixmap _doodleMap;
+	public static EditWindow Instance;
+	public Pixmap DoodleMap;
 	private Vector2 _previousPaintPosition;
 	
-	public EditWindow(Vector2 scale, Vector2 position, Color backgroundColor) {
-		super(scale, position, backgroundColor);
+	public EditWindow(Vector2 scale, Vector2 position) {
+		super(scale, position, Color.GRAY);
+		Instance=this;
 		InputManager.Instance.ClickableItems.add(this);
-		_doodleMap = new Pixmap((int) scale.x, (int) scale.y, Format.RGBA8888);
-		_doodleMap.setColor(Color.PURPLE);
-		DoodleTexture = new Texture(_doodleMap);
+		DoodleMap = new Pixmap((int) scale.x, (int) scale.y, Format.RGBA8888);
+		DoodleMap.setColor(Color.ORANGE);
+		DoodleTexture = new Texture(DoodleMap);
 	}
 	public void onClickDown(Vector2 clickPosition) {
 		// Getting rid of the null check make code stable with multiple simultaneous clicks
@@ -37,12 +39,12 @@ public class EditWindow extends Rec2D implements IClickable{
 		int startY = (int) _previousPaintPosition.y;
 		int endX = (int) paintPosition.x;
 		int endY = (int) paintPosition.y;
-		_doodleMap.drawLine(startX, startY, endX, endY);
-		_doodleMap.drawLine(startX+brushWidth, startY, endX+brushWidth, endY);
-		_doodleMap.drawLine(startX-brushWidth, startY, endX-brushWidth, endY);
-		_doodleMap.drawLine(startX, startY+brushWidth, endX, endY+brushWidth);
-		_doodleMap.drawLine(startX, startY+brushWidth, endX, endY-brushWidth);
+		DoodleMap.drawLine(startX, startY, endX, endY);
+		DoodleMap.drawLine(startX+brushWidth, startY, endX+brushWidth, endY);
+		DoodleMap.drawLine(startX-brushWidth, startY, endX-brushWidth, endY);
+		DoodleMap.drawLine(startX, startY+brushWidth, endX, endY+brushWidth);
+		DoodleMap.drawLine(startX, startY+brushWidth, endX, endY-brushWidth);
 		_previousPaintPosition = paintPosition;
-		DoodleTexture = new Texture(_doodleMap);
+		DoodleTexture = new Texture(DoodleMap);
 	}
 }

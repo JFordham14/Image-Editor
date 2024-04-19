@@ -1,5 +1,8 @@
 package com.mygdx.image_editor;
 
+import java.io.IOException;
+
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -11,14 +14,22 @@ public class InputManager implements InputProcessor {
 	private IHoverable _currentlyHovered;
 	private IClickable _currentlyClicked;
 	private int _clicks = 0; //Tracks how many mouse buttons are down
+	private boolean _controlPressed;
+	
 	public InputManager() {
 		Instance = this;
 	}
 
 	public boolean keyDown(int keycode) {
+		if (keycode == Keys.S && _controlPressed) {
+			try {ImageInputOutput.instance.saveImage("C:\\Users\\JaxF\\Desktop\\test.bmp");}
+			catch (IOException e) {e.printStackTrace();}
+		}
+		if (keycode == Keys.CONTROL_LEFT) { _controlPressed=true; }
 		return false;
 	}
 	public boolean keyUp(int keycode) {
+		if (keycode == Keys.CONTROL_LEFT) { _controlPressed=false; }
 		return false;
 	}
 	public boolean keyTyped(char character) {
