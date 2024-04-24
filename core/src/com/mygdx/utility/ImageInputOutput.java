@@ -1,4 +1,4 @@
-package com.mygdx.image_editor;
+package com.mygdx.utility;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,14 +7,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.image_editor.EditWindow;
+import com.mygdx.image_editor.Util;
 
 public class ImageInputOutput {
-	public static ImageInputOutput instance;
+	public static ImageInputOutput Instance;
+	public String ImageFolderLocation;
 	private byte[] _fileHeader;
 	private Pixmap _pixels;
 	
 	public ImageInputOutput() {
-		instance=this;
+		Instance=this;
 	}
 	
 	public Pixmap loadImage(String filePath) {
@@ -36,6 +39,7 @@ public class ImageInputOutput {
 			System.out.println("Unsupported imaxe pixel format. Incorrect bits per pixel"); 
 			return null; 
 		}
+		ImageFolderLocation = scrapeFolderLocation(filePath);
 		Pixmap pixels = new Pixmap(width, height, Format.RGBA8888);
 		int r,g,b;
 		int x = 0; 
@@ -61,6 +65,14 @@ public class ImageInputOutput {
 		_pixels = pixels;
 		return pixels;
 	}
+	public String scrapeFolderLocation (String filePath) {
+		StringBuilder builder = new StringBuilder(filePath);
+		for (int i=filePath.length()-1; i>=0; i--) {
+			if (filePath.charAt(i) != '\\') { continue; }
+			return builder.substring(0,i);
+		}
+		return null;
+	}
 	public void saveImage (String filePath) throws IOException {
 		FileOutputStream output = new FileOutputStream(filePath);
 		byte[] color;
@@ -80,7 +92,6 @@ public class ImageInputOutput {
 			EditWindow.Instance.DoodleMap, 
 			new Vector2(_pixels.getWidth(), _pixels.getHeight())
 		);
-//		Pixmap doodle = EditWindow.Instance.DoodleMap;
 		colorIndex=0;
 		for (int y=doodle.getHeight()-1; y>=0; y--) {
 			for (int x=0; x<doodle.getWidth(); x++) {
@@ -89,7 +100,6 @@ public class ImageInputOutput {
 					colorIndex += 3;
 					continue;
 				}
-//				System.out.println("FOUND NOT TRANSPARENT PIXEL");
 				colorData[colorIndex] = color[2];
 				colorData[colorIndex + 1] = color[1];
 				colorData[colorIndex + 2] = color[0];
@@ -100,6 +110,5 @@ public class ImageInputOutput {
 		output.write(_fileHeader);
 		output.write(colorData);
 		output.close();
-		System.out.println("Picture Saved to Desktop");
 	}
 }

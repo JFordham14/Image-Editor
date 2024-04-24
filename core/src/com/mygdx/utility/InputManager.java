@@ -1,4 +1,4 @@
-package com.mygdx.image_editor;
+package com.mygdx.utility;
 
 import java.io.IOException;
 
@@ -6,11 +6,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.image_editor.ImageEditor;
 
 public class InputManager implements InputProcessor {
 	public Array<IClickable> ClickableItems = new Array<IClickable>();
 	public Array<IHoverable> HoverableItems = new Array<IHoverable>();	
-	static InputManager Instance;
+	public static InputManager Instance;
 	private IHoverable _currentlyHovered;
 	private IClickable _currentlyClicked;
 	private int _clicks = 0; //Tracks how many mouse buttons are down
@@ -21,8 +22,9 @@ public class InputManager implements InputProcessor {
 	}
 
 	public boolean keyDown(int keycode) {
+		if (ImageInputOutput.Instance.ImageFolderLocation == null) { return false; }
 		if (keycode == Keys.S && _controlPressed) {
-			try {ImageInputOutput.instance.saveImage("C:\\Users\\JaxF\\Desktop\\test.bmp");}
+			try {ImageInputOutput.Instance.saveImage(ImageInputOutput.Instance.ImageFolderLocation + "\\output.bmp");}
 			catch (IOException e) {e.printStackTrace();}
 		}
 		if (keycode == Keys.CONTROL_LEFT) { _controlPressed=true; }

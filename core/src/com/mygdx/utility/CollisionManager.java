@@ -1,6 +1,7 @@
-package com.mygdx.image_editor;
+package com.mygdx.utility;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.image_editor.Rec2D;
 
 public class CollisionManager {
 	public static CollisionManager Instance;
